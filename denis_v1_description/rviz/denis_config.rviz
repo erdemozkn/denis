@@ -183,7 +183,7 @@ Visualization Manager:
       Position Transformer: XYZ
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.009999999776482582
+      Size (m): 0.06
       Style: Flat Squares
       Topic:
         Depth: 5
@@ -211,7 +211,7 @@ Visualization Manager:
         Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /depth_camera/camera_info
+        Value: /camera/camera_info
       Value: false
     - Class: rviz_default_plugins/Camera
       Enabled: false
@@ -224,7 +224,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /depth_camera/depth/image_raw
+        Value: /camera/image_raw
       Value: false
       Visibility:
         CameraInfo: true

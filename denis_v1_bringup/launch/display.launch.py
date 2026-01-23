@@ -1,39 +1,105 @@
 from launch import LaunchDescription
+from launch.actions import IncludeLaunchDescription
+from launch.substitutions import Command, PathJoinSubstitution
 from launch_ros.actions import Node
-from launch_ros.parameter_descriptions import ParameterValue 
-from launch.substitutions import Command
+from launch_ros.parameter_descriptions import ParameterValue
+from launch.launch_description_sources import PythonLaunchDescriptionSource
+from ament_index_python.packages import get_package_share_directory
 import os
-from ament_index_python.packages import get_package_share_path
 
 
 def generate_launch_description():
 
-    urdf_path = os.path.join(get_package_share_path('denis_v1_description'), 'urdf', 'denis.urdf.xacro')
+    pkg_description = get_package_share_directory('denis_v1_description')
+    pkg_bringup = get_package_share_directory('denis_v1_bringup')
 
-    robot_description= ParameterValue(Command(['xacro ', urdf_path]), value_type=str)
-    
-    robot_state_publisher_node = Node(package='robot_state_publisher', executable='robot_state_publisher', parameters=[{'robot_description' : robot_description}])
-    
-    controller_config_path = os.path.join(get_package_share_path('denis_v1_bringup'), 'config', 'denis_controllers.yaml')
+    # -------------------- ROBOT DESCRIPTION --------------------
+    urdf_path = os.path.join(
+        pkg_description,
+        'urdf',
+        'denis.urdf.xacro'
+    )
 
-    controller_manager = Node(
-        package='controller_manager',
-        executable='ros2_control_node',
-        parameters=[{'robot_description': robot_description},controller_config_path]
-)
+    robot_description = ParameterValue(
+        Command(['xacro ', urdf_path, ' use_sim:=true']),
+        value_type=str
+    )
 
-    controller_manager_spawn1 = Node(package='controller_manager', executable='spawner', arguments=['joint_state_broadcaster'])
+    # -------------------- GAZEBO WORLD --------------------
+    world_path = os.path.join(
+        pkg_bringup,
+        'worlds',
+        'nav2_test.sdf'
+    )
 
-    controller_manager_spawn2 = Node(package='controller_manager', executable='spawner', arguments=['diff_drive_controller'])
+    gazebo = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([
+                get_package_share_directory('ros_gz_sim'),
+                'launch',
+                'gz_sim.launch.py'
+            ])
+        ),
+        launch_arguments={
+            'gz_args': f'-r -v 4 {world_path}'
+        }.items()
+    )
 
-    rviz_config = os.path.join(get_package_share_path('denis_v1_description'), 'rviz', 'config.rviz')
+    # -------------------- BRIDGE --------------------
 
-    rviz2 = Node(package='rviz2', executable='rviz2', arguments=['-d', rviz_config])
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        name='gz_ros_bridge',
+        output='screen',
+        parameters=[
+            {'config_file': os.path.join(
+                get_package_share_directory('denis_v1_bringup'),
+                'config',
+                'gazebo_bridge.yaml'
+            )}
+        ]
+    )
+    # -------------------- SPAWN ROBOT --------------------
+    spawn_entity = Node(
+        package='ros_gz_sim',
+        executable='create',
+        arguments=[
+            '-topic', 'robot_description',
+            '-name', 'denis',
+            '-x', '-1.0',
+            '-y', '1.0',
+            '-z', '0.1'
+        ],
+        output='screen'
+    )
+
+    # -------------------- STATE PUBLISHER --------------------
+    robot_state_publisher = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        parameters=[
+            {
+                'robot_description': robot_description,
+                'use_sim_time': True
+            }
+        ],
+    )
+
+    # -------------------- RVIZ --------------------
+    rviz = Node(
+        package='rviz2',
+        executable='rviz2',
+        arguments=[
+            '-d',
+            os.path.join(pkg_description, 'rviz', 'denis_config.rviz')
+        ],
+    )
 
     return LaunchDescription([
-        robot_state_publisher_node,
-        controller_manager,
-        controller_manager_spawn1,
-        controller_manager_spawn2,
-        rviz2
+        gazebo,
+        bridge,
+        robot_state_publisher,
+        spawn_entity,
+        rviz,
     ])

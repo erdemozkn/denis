@@ -11,14 +11,4 @@
     <material name="orange">
         <color rgba="1 ${165/255} 0 1" />
     </material>
-
-    <xacro:property name="base_length" value="0.6" />
-    <xacro:property name="base_width" value="0.4" />
-    <xacro:property name="base_height" value="0.2" />
-    <xacro:property name="lidar_radius" value="0.1" />
-    <xacro:property name="lidar_length" value="0.04" />
-    <xacro:property name="wheel_radius" value="0.1" />
-    <xacro:property name="wheel_length" value="0.05" />
-    <xacro:property name="sphere_front_radius" value="0.05" />
-
 </robot>
