@@ -35,8 +35,8 @@
         <child link="camera_depth_frame" />
     </joint>
 
-    <!-- <gazebo reference="camera_depth_frame">
-        <sensor name="depth_camera" type="depth">
+    <gazebo reference="camera_depth_frame">
+        <sensor name="depth_camera" type="rgbd_camera">
             <gz_frame_id>camera_depth_frame</gz_frame_id>
             <visualize>true</visualize>
             <update_rate>30.0</update_rate>
@@ -54,5 +54,6 @@
                 </clip>
             </camera>
         </sensor>
-    </gazebo> -->
+    </gazebo>
+
 </robot>

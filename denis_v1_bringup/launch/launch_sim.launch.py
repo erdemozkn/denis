@@ -68,7 +68,9 @@ def generate_launch_description():
         arguments=[
             '-topic', 'robot_description',
             '-name', 'denis_v1',
-            '-z', '0.2'
+            '-x', '-1.0',
+            '-y', '1.0',
+            '-z', '0.1'
         ],
         output='screen'
     )
@@ -122,7 +124,7 @@ def generate_launch_description():
         executable='rviz2',
         arguments=[
             '-d',
-            os.path.join(pkg_description, 'rviz', 'config.rviz')
+            os.path.join(pkg_description, 'rviz', 'denis_config.rviz')
         ],
     )
 
