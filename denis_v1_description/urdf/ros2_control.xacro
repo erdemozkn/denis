@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
     <xacro:unless value="$(arg sim_mode)">
         <ros2_control name="RealRobot" type="system">
             <hardware>
@@ -57,8 +58,8 @@
 
     <gazebo>
     <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
-        <parameters>$(find denis_v1_bringup)/config/denis_controllers.yaml</parameters>
         <parameters>$(find denis_v1_bringup)/config/gazebo_control_use_sim.yaml</parameters>
+        <parameters>$(find denis_v1_bringup)/config/denis_controllers.yaml</parameters>
     </plugin>
 </gazebo>
 </robot>
