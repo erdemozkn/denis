@@ -1,0 +1,10 @@
+<library path="denis_v1_hardware">
+  <class
+    name="denis_diff_hardware/DiffDenisSystemHardware"
+    type="denis_diff_hardware::DiffDenisSystemHardware"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Differential drive hardware interface
+    </description>
+  </class>
+</library>
