@@ -5,27 +5,25 @@
         <ros2_control name="RealRobot" type="system">
             <hardware>
                 <plugin>denis_diff_hardware/DiffDenisSystemHardware</plugin>
-                <param name="left_wheel_name">left_wheel_joint</param>
-                <param name="right_wheel_name">right_wheel_joint</param>
+                <param name="left_wheel_name">base_left_wheel_joint</param>
+                <param name="right_wheel_name">base_right_wheel_joint</param>
                 <param name="loop_rate">30</param>
-                <param name="device">/dev/ttyUSB0</param>
-                <param name="baud_rate">115200</param>
+                <param name="device">/dev/serial/by-id/usb-1a86_USB_Serial-if00-port0</param>
+                <param name="baud_rate">57600</param>
                 <param name="timeout_ms">1000</param>
                 <param name="enc_counts_per_rev">660</param>
+                <param name="pid_p">20</param>
+                <param name="pid_d">12</param>
+                <param name="pid_i">0</param>
+                <param name="pid_o">50</param>
             </hardware>
             <joint name="base_left_wheel_joint">
-                <command_interface name="velocity">
-                    <param name="min">-10</param>
-                    <param name="max">10</param>
-                </command_interface>
+                <command_interface name="velocity" />
                 <state_interface name="position" />
                 <state_interface name="velocity" />
             </joint>
             <joint name="base_right_wheel_joint">
-                <command_interface name="velocity">
-                    <param name="min">-10</param>
-                    <param name="max">10</param>
-                </command_interface>
+                <command_interface name="velocity" />
                 <state_interface name="position" />
                 <state_interface name="velocity" />
             </joint>

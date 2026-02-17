@@ -1,12 +1,14 @@
 #ifndef DIFFDRIVE_ARDUINO_WHEEL_HPP
 #define DIFFDRIVE_ARDUINO_WHEEL_HPP
 
-
 #include <string>
 #include <cmath>
+
+
 class Wheel
 {
-public:
+    public:
+
     std::string name = "";
     int enc = 0;
     double cmd = 0;
@@ -18,18 +20,24 @@ public:
 
     Wheel(const std::string &wheel_name, int counts_per_rev)
     {
-        setup(wheel_name, counts_per_rev);
+      setup(wheel_name, counts_per_rev);
     }
 
+    
     void setup(const std::string &wheel_name, int counts_per_rev)
     {
-        name = wheel_name;
-        rads_per_count = (2 * M_PI) / counts_per_rev;
+      name = wheel_name;
+      rads_per_count = (2*M_PI)/counts_per_rev;
     }
 
-    double calcEncAngle() {
-        return enc * rads_per_count;
+    double calc_enc_angle()
+    {
+      return enc * rads_per_count;
     }
+
+
+
 };
 
-#endif
+
+#endif // DIFFDRIVE_ARDUINO_WHEEL_HPP

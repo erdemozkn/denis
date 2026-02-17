@@ -11,7 +11,6 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(hardware_interface REQUIRED)
 find_package(pluginlib REQUIRED)
 
-
 add_library(${PROJECT_NAME} SHARED
   src/diff_denis_system.cpp
 )
@@ -22,8 +21,13 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 
 ament_target_dependencies(${PROJECT_NAME}
   rclcpp
+  rclcpp_lifecycle
   hardware_interface
   pluginlib
+)
+
+target_link_libraries(${PROJECT_NAME}
+serial
 )
 
 pluginlib_export_plugin_description_file(

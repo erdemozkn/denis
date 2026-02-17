@@ -115,4 +115,4 @@ private:
     int timeout_ms_;
 };
 
-#endif
+#endif // DIFFDRIVE_ARDUINO_ARDUINO_COMMS_HPP

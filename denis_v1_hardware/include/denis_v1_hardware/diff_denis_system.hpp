@@ -19,10 +19,14 @@ namespace denis_diff_hardware
         std::string right_wheel_name = "";
         float loop_rate = 0.0;
         std::string device = "";
-        int baut_rate = "";
+        int baud_rate = 0;
         int timeout_ms = 0;
         int enc_counts_per_rev = 0;
-    }
+        int pid_p = 0;
+        int pid_d = 0;
+        int pid_i = 0;
+        int pid_o = 0;
+    };
 
     class DiffDenisSystemHardware : public hardware_interface::SystemInterface
     {
