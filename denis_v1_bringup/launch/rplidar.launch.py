@@ -13,7 +13,7 @@ def generate_launch_description():
             output='screen',
             parameters=[{
                 'serial_port': '/dev/serial/by-path/platform-fd500000.pcie-pci-0000:01:00.0-usb-0:1.2:1.0-port0',
-                'frame_id': 'laser_frame',
+                'frame_id': 'lidar_link',
                 'angle_compensate': True,
                 'scan_mode': 'Standard'
             }]

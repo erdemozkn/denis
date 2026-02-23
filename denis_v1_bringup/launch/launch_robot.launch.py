@@ -36,10 +36,9 @@ def generate_launch_description():
             package="twist_mux",
             executable="twist_mux",
             parameters=[
-                twist_mux_params,
-                {'use_stamped': False}
+                twist_mux_params
             ],
-            remappings=[('/cmd_vel_out', '/diff_drive_controller/cmd_vel_unstamped')]
+            remappings=[('/cmd_vel_out', '/diff_drive_controller/cmd_vel')]
     )
 
     robot_description = Command(['ros2 param get --hide-type /robot_state_publisher robot_description'])

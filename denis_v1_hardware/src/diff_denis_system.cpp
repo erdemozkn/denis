@@ -206,15 +206,9 @@ namespace denis_diff_hardware
     hardware_interface::return_type DiffDenisSystemHardware::write(
         const rclcpp::Time &time, const rclcpp::Duration &period)
     {
-        // ... (diğer kodlar)
         int motor_l_counts_per_loop = wheel_l_.cmd / wheel_l_.rads_per_count / cfg_.loop_rate;
         int motor_r_counts_per_loop = wheel_r_.cmd / wheel_r_.rads_per_count / cfg_.loop_rate;
-
-        // Mesajı terminale basmak için true ekle:
         comms_.set_motor_values(motor_l_counts_per_loop, motor_r_counts_per_loop);
-
-        // Debug için:
-        RCLCPP_INFO(this->get_logger(), "CMD L: %f, R: %f", wheel_l_.cmd, wheel_r_.cmd);
 
         return hardware_interface::return_type::OK;
     }
