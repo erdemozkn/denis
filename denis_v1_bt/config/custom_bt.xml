@@ -1,0 +1,30 @@
+<root main_tree_to_execute="MainTree">
+  <BehaviorTree ID="MainTree">
+    <RecoveryNode number_of_retries="6" name="NavigateRecovery">
+      <PipelineSequence name="NavigateWithZones">
+        <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+
+        <ReactiveSelector>
+          <Sequence>
+            <CheckZone zone_name="oda" />
+            <FollowPath path="{path}" controller_id="OdaController"/>
+          </Sequence>
+
+          <Sequence>
+            <CheckZone zone_name="ramp" />
+            <FollowPath path="{path}" controller_id="RampaController"/>
+          </Sequence>
+
+          <Sequence>
+            <CheckZone zone_name="antre" />
+            <FollowPath path="{path}" controller_id="AntreController"/>
+          </Sequence>
+
+          <FollowPath path="{path}" controller_id="FollowPath"/>
+        </ReactiveSelector>
+      </PipelineSequence>
+      
+      <ClearEntireCostmap name="ClearGlobal" service_name="global_costmap/clear_entirely_global_costmap"/>
+    </RecoveryNode>
+  </BehaviorTree>
+</root>

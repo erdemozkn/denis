@@ -1,0 +1,7 @@
+<root>
+  <TreeNodesModel>
+    <Condition ID="CheckZone">
+      <input_port name="zone_name">YAML dosyasındaki oda adı</input_port>
+    </Condition>
+  </TreeNodesModel>
+</root>

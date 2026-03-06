@@ -59,7 +59,8 @@ bt_navigator:
 
     # plugin_lib_names is used to add custom BT plugins to the executor (vector of strings).
     # Built-in plugins are added automatically
-    # plugin_lib_names: []
+    plugin_lib_names:
+      - denis_v1_bt
 
     error_code_names:
       - compute_path_error_code
@@ -99,7 +100,7 @@ controller_server:
       plugin: "nav2_mppi_controller::MPPIController"
       time_steps: 56
       model_dt: 0.05
-      batch_size: 2000 # too much i know but 4070ti super from dev server.(Rasberrypi 4 8gb not good)
+      batch_size: 2000 # too much
       ax_max: 3.0
       ax_min: -3.0
       ay_max: 3.0
@@ -185,6 +186,15 @@ controller_server:
       #   enabled: true
       #   twirling_cost_power: 1
       #   twirling_cost_weight: 10.0
+    OdaController:
+      plugin: "nav2_mppi_controller::MPPIController"
+      max_vel_x: 5.0
+    RampaController:
+      plugin: "nav2_mppi_controller::MPPIController"
+      max_vel_x: 4.0
+    AntreController:
+      plugin: "nav2_mppi_controller::MPPIController"
+      max_vel_x: 8.0
 
 local_costmap:
   local_costmap:
