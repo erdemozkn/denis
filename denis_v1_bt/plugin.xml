@@ -1,7 +1,7 @@
-<root>
-  <TreeNodesModel>
-    <Condition ID="CheckZone">
-      <input_port name="zone_name">YAML dosyasındaki oda adı</input_port>
-    </Condition>
-  </TreeNodesModel>
-</root>
+<library path="denis_v1_bt">
+  <class name="CheckZone"
+         type="denis_v1_bt::CheckZone"
+         base_class_type="BT::ConditionNode">
+    <description>Check area that defined zone with yaml.</description>
+  </class>
+</library>

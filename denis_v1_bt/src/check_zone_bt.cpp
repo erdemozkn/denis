@@ -48,6 +48,10 @@ namespace denis_v1_bt
             }
 
             auto pose = getCurrentPose();
+
+            RCLCPP_INFO(node_->get_logger(),
+                        "Robot pose: %.2f %.2f", pose.position.x, pose.position.y);
+
             if (isPointInPolygon(pose.position.x, pose.position.y, all_zones_[zone_name]))
             {
                 return BT::NodeStatus::SUCCESS;
@@ -89,6 +93,8 @@ namespace denis_v1_bt
 
         bool isPointInPolygon(double x, double y, const std::vector<Point> &poly)
         {
+            if (poly.size() < 3)
+                return false;
             bool inside = false;
             for (size_t i = 0, j = poly.size() - 1; i < poly.size(); j = i++)
             {
@@ -104,7 +110,7 @@ namespace denis_v1_bt
             geometry_msgs::msg::Pose p;
             try
             {
-                auto t = tf_buffer_->lookupTransform("map", "base_link", tf2::TimePointZero);
+                auto t = tf_buffer_->lookupTransform("map", "base_footprint", tf2::TimePointZero);
                 p.position.x = t.transform.translation.x;
                 p.position.y = t.transform.translation.y;
             }
