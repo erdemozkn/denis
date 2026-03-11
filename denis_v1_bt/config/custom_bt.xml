@@ -1,30 +1,27 @@
-<root main_tree_to_execute="MainTree">
+<root main_tree_to_execute="MainTree" BTCPP_format="4">
   <BehaviorTree ID="MainTree">
-    <RecoveryNode number_of_retries="6" name="NavigateRecovery">
-      <PipelineSequence name="NavigateWithZones">
+    <RecoveryNode number_of_retries="3" name="NavigateRecovery">
+      <PipelineSequence name="MainPath">
         <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
 
-        <ReactiveSelector>
-          <Sequence>
-            <CheckZone zone_name="oda" />
+        <ReactiveFallback name="ZoneControllerSelector">
+          <Sequence name="InOda">
+            <CheckZone zone_name="oda"/>
             <FollowPath path="{path}" controller_id="OdaController"/>
           </Sequence>
-
-          <Sequence>
-            <CheckZone zone_name="ramp" />
+          <Sequence name="InRampa">
+            <CheckZone zone_name="ramp"/>
             <FollowPath path="{path}" controller_id="RampaController"/>
           </Sequence>
-
-          <Sequence>
-            <CheckZone zone_name="antre" />
+          <Sequence name="InAntre">
+            <CheckZone zone_name="antre"/>
             <FollowPath path="{path}" controller_id="AntreController"/>
           </Sequence>
-
           <FollowPath path="{path}" controller_id="FollowPath"/>
-        </ReactiveSelector>
+        </ReactiveFallback>
       </PipelineSequence>
-      
-      <ClearEntireCostmap name="ClearGlobal" service_name="global_costmap/clear_entirely_global_costmap"/>
+
+      <ClearEntireCostmap service_name="global_costmap/clear_entirely_global_costmap"/>
     </RecoveryNode>
   </BehaviorTree>
 </root>

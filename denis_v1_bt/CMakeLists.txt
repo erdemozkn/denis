@@ -10,7 +10,6 @@ find_package(tf2_ros REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(pluginlib REQUIRED)
 
-# Add your library
 add_library(denis_v1_bt SHARED
   src/check_zone_bt.cpp
 )

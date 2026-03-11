@@ -21,13 +21,14 @@ namespace denis_v1_bt
         CheckZone(const std::string &name, const BT::NodeConfiguration &config)
             : BT::ConditionNode(name, config)
         {
-
             config.blackboard->get<rclcpp::Node::SharedPtr>("node", node_);
             tf_buffer_ = std::make_shared<tf2_ros::Buffer>(node_->get_clock());
             tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
             std::string yaml_path = "/home/erdem/ros2_ws/src/denis_v1_bringup/rooms/ev.yaml";
             loadZonesFromYaml(yaml_path);
+
+            RCLCPP_INFO(rclcpp::get_logger("CheckZoneDbg"), "[CONSTRUCTOR] CheckZone yaratıldı, zone_name bekleniyor...");
         }
 
         static BT::PortsList providedPorts()
@@ -39,23 +40,25 @@ namespace denis_v1_bt
         {
             std::string zone_name;
             if (!getInput("zone_name", zone_name))
+            {
+                RCLCPP_ERROR(rclcpp::get_logger("CheckZoneDbg"), "[TICK] zone_name no input.");
                 return BT::NodeStatus::FAILURE;
+            }
 
             if (all_zones_.find(zone_name) == all_zones_.end())
             {
-                RCLCPP_ERROR(node_->get_logger(), "%s bölgesi YAML içinde bulunamadı!", zone_name.c_str());
+                RCLCPP_ERROR(node_->get_logger(), "There is no %s area in yaml.", zone_name.c_str());
                 return BT::NodeStatus::FAILURE;
             }
 
             auto pose = getCurrentPose();
-
-            RCLCPP_INFO(node_->get_logger(),
-                        "Robot pose: %.2f %.2f", pose.position.x, pose.position.y);
+            RCLCPP_INFO(rclcpp::get_logger("CheckZoneDbg"), "[TICK] zone_name: %s", zone_name.c_str());
 
             if (isPointInPolygon(pose.position.x, pose.position.y, all_zones_[zone_name]))
             {
                 return BT::NodeStatus::SUCCESS;
             }
+
             return BT::NodeStatus::FAILURE;
         }
 
