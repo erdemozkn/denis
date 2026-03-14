@@ -41,21 +41,23 @@ namespace denis_v1_bt
             std::string zone_name;
             if (!getInput("zone_name", zone_name))
             {
-                RCLCPP_ERROR(rclcpp::get_logger("CheckZoneDbg"), "[TICK] zone_name no input.");
                 return BT::NodeStatus::FAILURE;
             }
 
             if (all_zones_.find(zone_name) == all_zones_.end())
             {
-                RCLCPP_ERROR(node_->get_logger(), "There is no %s area in yaml.", zone_name.c_str());
+                RCLCPP_ERROR(node_->get_logger(), "YAML'da %s bölgesi bulunamadı!", zone_name.c_str());
                 return BT::NodeStatus::FAILURE;
             }
 
             auto pose = getCurrentPose();
-            RCLCPP_INFO(rclcpp::get_logger("CheckZoneDbg"), "[TICK] zone_name: %s", zone_name.c_str());
+
+            RCLCPP_INFO(node_->get_logger(), "[%s] Robot Konumu: x=%.2f, y=%.2f",
+                        zone_name.c_str(), pose.position.x, pose.position.y);
 
             if (isPointInPolygon(pose.position.x, pose.position.y, all_zones_[zone_name]))
             {
+                RCLCPP_INFO(node_->get_logger(), ">> ROBOT %s BÖLGESİNDE!", zone_name.c_str());
                 return BT::NodeStatus::SUCCESS;
             }
 
@@ -111,14 +113,21 @@ namespace denis_v1_bt
         geometry_msgs::msg::Pose getCurrentPose()
         {
             geometry_msgs::msg::Pose p;
+            // Başlangıç değerlerini çok alakasız bir rakam yapalım ki
+            // hata olduğunda (0,0) ile karışmasın.
+            p.position.x = -999.9;
+            p.position.y = -999.9;
+
             try
             {
-                auto t = tf_buffer_->lookupTransform("map", "base_footprint", tf2::TimePointZero);
+                // 0.1 saniye kadar bekleme payı bırakalım, TF bazen o an yetişemez.
+                auto t = tf_buffer_->lookupTransform("map", "base_footprint", tf2::TimePointZero, tf2::durationFromSec(0.1));
                 p.position.x = t.transform.translation.x;
                 p.position.y = t.transform.translation.y;
             }
-            catch (...)
+            catch (tf2::TransformException &ex)
             {
+                RCLCPP_WARN(node_->get_logger(), "TF Hatası: %s", ex.what());
             }
             return p;
         }

@@ -1,4 +1,4 @@
-image: /home/erdem/Desktop/ros2_ws/src/denis_v1_bringup/maps/restaurant.pgm
+image: restaurant.pgm
 mode: trinary
 resolution: 0.050
 origin: [-8.791, -4.779, 0]

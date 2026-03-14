@@ -3,22 +3,28 @@
     <RecoveryNode number_of_retries="3" name="NavigateRecovery">
       <PipelineSequence name="MainPath">
         <ComputePathToPose goal="{goal}" path="{path}" planner_id="GridBased"/>
+        
+        <ReactiveSequence name="MonitorZoneAndFollow">
+          
+          <Fallback name="ControllerSelector">
+            <Sequence name="OdaLogic">
+              <CheckZone zone_name="oda"/>
+              <SetBlackboard value="OdaController" output_key="selected_controller"/>
+            </Sequence>
+            <Sequence name="RampaLogic">
+              <CheckZone zone_name="ramp"/>
+              <SetBlackboard value="RampaController" output_key="selected_controller"/>
+            </Sequence>
+            <Sequence name="AntreLogic">
+              <CheckZone zone_name="antre"/>
+              <SetBlackboard value="AntreController" output_key="selected_controller"/>
+            </Sequence>
+            <SetBlackboard value="FollowPath" output_key="selected_controller"/>
+          </Fallback>
 
-        <ReactiveFallback name="ZoneControllerSelector">
-          <Sequence name="InOda">
-            <CheckZone zone_name="oda"/>
-            <FollowPath path="{path}" controller_id="OdaController"/>
-          </Sequence>
-          <Sequence name="InRampa">
-            <CheckZone zone_name="ramp"/>
-            <FollowPath path="{path}" controller_id="RampaController"/>
-          </Sequence>
-          <Sequence name="InAntre">
-            <CheckZone zone_name="antre"/>
-            <FollowPath path="{path}" controller_id="AntreController"/>
-          </Sequence>
-          <FollowPath path="{path}" controller_id="FollowPath"/>
-        </ReactiveFallback>
+          <FollowPath path="{path}" controller_id="{selected_controller}"/>
+          
+        </ReactiveSequence>
       </PipelineSequence>
 
       <ClearEntireCostmap service_name="global_costmap/clear_entirely_global_costmap"/>
