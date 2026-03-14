@@ -23,21 +23,14 @@ def generate_launch_description():
         }.items()
     )
 
-    joystick = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            pkg_denis_bringup, 'launch', 'joystick.launch.py'
-        )]), launch_arguments={'use_sim_time': 'true'}.items()
-    )
-
     twist_mux_params = os.path.join(pkg_denis_bringup, 'config', 'twist_mux.yaml')
     twist_mux = Node(
-        package="twist_mux",
-        executable="twist_mux",
-    parameters=[
-        twist_mux_params,
-        {'use_stamped': False}
-    ],
-    remappings=[('/cmd_vel_out', '/diff_drive_controller/cmd_vel_unstamped')]
+            package="twist_mux",
+            executable="twist_mux",
+            parameters=[
+                twist_mux_params,
+            ],
+            remappings=[('/cmd_vel_out', '/diff_drive_controller/cmd_vel')]
 )
 
     default_world = os.path.join(pkg_denis_bringup, 'worlds', 'nav2_test.sdf')
@@ -101,7 +94,6 @@ def generate_launch_description():
 
     return LaunchDescription([
         rsp,
-        joystick,
         twist_mux,
         world_arg,
         gazebo,

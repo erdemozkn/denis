@@ -25,12 +25,6 @@ def generate_launch_description():
         }.items()
     )
 
-    # joystick = IncludeLaunchDescription(
-    #     PythonLaunchDescriptionSource([os.path.join(
-    #         pkg_denis_bringup, 'launch', 'joystick.launch.py'
-    #     )]), launch_arguments={'use_sim_time': 'false'}.items()
-    # )
-
     twist_mux_params = os.path.join(pkg_denis_bringup, 'config', 'twist_mux.yaml')
     twist_mux = Node(
             package="twist_mux",
