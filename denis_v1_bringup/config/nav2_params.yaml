@@ -111,7 +111,7 @@ controller_server:
       vx_std: 0.2
       vy_std: 0.2
       wz_std: 0.4
-      vx_max: 0.5
+      vx_max: 0.25
       vx_min: -0.35
       vy_max: 0.5
       wz_max: 3.0
@@ -288,7 +288,7 @@ controller_server:
       vx_std: 0.2
       vy_std: 0.2
       wz_std: 0.4
-      vx_max: 0.7
+      vx_max: 1.0
       vx_min: -0.35
       vy_max: 0.5
       wz_max: 3.0
