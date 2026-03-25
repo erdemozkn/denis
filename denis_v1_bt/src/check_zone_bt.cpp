@@ -113,14 +113,8 @@ namespace denis_v1_bt
         geometry_msgs::msg::Pose getCurrentPose()
         {
             geometry_msgs::msg::Pose p;
-            // Başlangıç değerlerini çok alakasız bir rakam yapalım ki
-            // hata olduğunda (0,0) ile karışmasın.
-            p.position.x = -999.9;
-            p.position.y = -999.9;
-
             try
             {
-                // 0.1 saniye kadar bekleme payı bırakalım, TF bazen o an yetişemez.
                 auto t = tf_buffer_->lookupTransform("map", "base_footprint", tf2::TimePointZero, tf2::durationFromSec(0.1));
                 p.position.x = t.transform.translation.x;
                 p.position.y = t.transform.translation.y;
