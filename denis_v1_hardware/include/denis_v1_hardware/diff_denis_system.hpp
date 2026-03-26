@@ -8,7 +8,7 @@
 #include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
 #include "rclcpp_lifecycle/state.hpp"
 
-#include "denis_v1_hardware/arduino_comms.hpp"
+#include "denis_v1_hardware/comms.hpp"
 #include "denis_v1_hardware/wheel.hpp"
 
 namespace denis_diff_hardware
@@ -52,7 +52,7 @@ namespace denis_diff_hardware
             const rclcpp::Time &time, const rclcpp::Duration &period) override;
 
     private:
-        ArduinoComms comms_;
+        Comms comms_;
         Config cfg_;
         Wheel wheel_l_;
         Wheel wheel_r_;

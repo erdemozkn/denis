@@ -35,7 +35,7 @@ namespace denis_diff_hardware
         }
         else
         {
-            RCLCPP_INFO(rclcpp::get_logger("DiffDriveArduinoHardware"), "PID values not supplied, using defaults.");
+            RCLCPP_INFO(rclcpp::get_logger("DiffDriveHardware"), "PID values not supplied, using defaults.");
         }
 
         wheel_l_.setup(cfg_.left_wheel_name, cfg_.enc_counts_per_rev);
@@ -46,7 +46,7 @@ namespace denis_diff_hardware
             if (joint.command_interfaces.size() != 1)
             {
                 RCLCPP_FATAL(
-                    rclcpp::get_logger("DiffDriveArduinoHardware"),
+                    rclcpp::get_logger("DiffDriveHardware"),
                     "Joint '%s' has %zu command interfaces found. 1 expected.", joint.name.c_str(),
                     joint.command_interfaces.size());
                 return hardware_interface::CallbackReturn::ERROR;
@@ -55,7 +55,7 @@ namespace denis_diff_hardware
             if (joint.command_interfaces[0].name != hardware_interface::HW_IF_VELOCITY)
             {
                 RCLCPP_FATAL(
-                    rclcpp::get_logger("DiffDriveArduinoHardware"),
+                    rclcpp::get_logger("DiffDriveHardware"),
                     "Joint '%s' have %s command interfaces found. '%s' expected.", joint.name.c_str(),
                     joint.command_interfaces[0].name.c_str(), hardware_interface::HW_IF_VELOCITY);
                 return hardware_interface::CallbackReturn::ERROR;
@@ -64,7 +64,7 @@ namespace denis_diff_hardware
             if (joint.state_interfaces.size() != 2)
             {
                 RCLCPP_FATAL(
-                    rclcpp::get_logger("DiffDriveArduinoHardware"),
+                    rclcpp::get_logger("DiffDriveHardware"),
                     "Joint '%s' has %zu state interface. 2 expected.", joint.name.c_str(),
                     joint.state_interfaces.size());
                 return hardware_interface::CallbackReturn::ERROR;
@@ -73,7 +73,7 @@ namespace denis_diff_hardware
             if (joint.state_interfaces[0].name != hardware_interface::HW_IF_POSITION)
             {
                 RCLCPP_FATAL(
-                    rclcpp::get_logger("DiffDriveArduinoHardware"),
+                    rclcpp::get_logger("DiffDriveHardware"),
                     "Joint '%s' have '%s' as first state interface. '%s' expected.", joint.name.c_str(),
                     joint.state_interfaces[0].name.c_str(), hardware_interface::HW_IF_POSITION);
                 return hardware_interface::CallbackReturn::ERROR;
@@ -82,7 +82,7 @@ namespace denis_diff_hardware
             if (joint.state_interfaces[1].name != hardware_interface::HW_IF_VELOCITY)
             {
                 RCLCPP_FATAL(
-                    rclcpp::get_logger("DiffDriveArduinoHardware"),
+                    rclcpp::get_logger("DiffDriveHardware"),
                     "Joint '%s' have '%s' as second state interface. '%s' expected.", joint.name.c_str(),
                     joint.state_interfaces[1].name.c_str(), hardware_interface::HW_IF_VELOCITY);
                 return hardware_interface::CallbackReturn::ERROR;

@@ -1,5 +1,5 @@
-#ifndef DIFFDRIVE_ARDUINO_WHEEL_HPP
-#define DIFFDRIVE_ARDUINO_WHEEL_HPP
+#ifndef DIFFDRIVE_WHEEL_HPP
+#define DIFFDRIVE_WHEEL_HPP
 
 #include <string>
 #include <cmath>
@@ -40,4 +40,4 @@ class Wheel
 };
 
 
-#endif // DIFFDRIVE_ARDUINO_WHEEL_HPP
+#endif // DIFFDRIVE_WHEEL_HPP
