@@ -5,7 +5,7 @@
 #include "hardware_interface/hardware_info.hpp"
 #include "hardware_interface/system_interface.hpp"
 #include "hardware_interface/types/hardware_interface_return_values.hpp"
-#include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"
+#include "rclcpp_lifecycle/node_interfaces/lifecycle_node_interface.hpp"s
 #include "rclcpp_lifecycle/state.hpp"
 
 #include "denis_v1_hardware/comms.hpp"
@@ -21,6 +21,7 @@ namespace denis_diff_hardware
         std::string device = "";
         int baud_rate = 0;
         int timeout_ms = 0;
+        bool debug_comms_feedback = false;
         int enc_counts_per_rev = 0;
         int pid_p = 0;
         int pid_d = 0;

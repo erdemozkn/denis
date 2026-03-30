@@ -24,6 +24,7 @@ namespace denis_diff_hardware
         cfg_.device = info_.hardware_parameters["device"];
         cfg_.baud_rate = std::stoi(info_.hardware_parameters["baud_rate"]);
         cfg_.timeout_ms = std::stoi(info_.hardware_parameters["timeout_ms"]);
+        cfg_.debug_comms_feedback = std::stoi(info_.hardware_parameters["debug_comms_feedback"]);
         cfg_.enc_counts_per_rev = std::stoi(info_.hardware_parameters["enc_counts_per_rev"]);
 
         if (info_.hardware_parameters.count("pid_p") > 0)

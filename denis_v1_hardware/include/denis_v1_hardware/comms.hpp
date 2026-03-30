@@ -30,8 +30,8 @@ LibSerial::BaudRate convert_baud_rate(int baud_rate)
   case 230400:
     return LibSerial::BaudRate::BAUD_230400;
   default:
-    std::cout << "Error! Baud rate " << baud_rate << " not supported! Default to 57600" << std::endl;
-    return LibSerial::BaudRate::BAUD_115200; // esp32 which support 115200 baudrate
+    std::cout << "Error! Baud rate " << baud_rate << " not supported! Default to 115200" << std::endl;
+    return LibSerial::BaudRate::BAUD_115200; // esp32 supports 115200 baudrate
   }
 }
 
@@ -44,6 +44,7 @@ public:
   void connect(const std::string &serial_device, int32_t baud_rate, int32_t timeout_ms)
   {
     timeout_ms_ = timeout_ms;
+    debug_comms_feedback_ = false;
     serial_conn_.Open(serial_device);
     serial_conn_.SetBaudRate(convert_baud_rate(baud_rate));
   }
@@ -58,7 +59,7 @@ public:
     return serial_conn_.IsOpen();
   }
 
-  std::string send_msg(const std::string &msg_to_send, bool print_output = false)
+  std::string send_msg(const std::string &msg_to_send)
   {
     serial_conn_.FlushIOBuffers();
     serial_conn_.Write(msg_to_send);
@@ -74,7 +75,7 @@ public:
       std::cerr << "The ReadByte() call has timed out." << std::endl;
     }
 
-    if (print_output)
+    if (debug_comms_feedback_)
     {
       std::cout << "Sent: " << msg_to_send << " Recv: " << response << std::endl;
     }
@@ -116,6 +117,7 @@ public:
 private:
   LibSerial::SerialPort serial_conn_;
   int timeout_ms_;
+  bool debug_comms_feedback_;
 };
 
 #endif // DIFFDRIVE_COMMS_HPP

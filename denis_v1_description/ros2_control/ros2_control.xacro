@@ -12,6 +12,7 @@
                 <param name="baud_rate">115200</param>
                 <param name="timeout_ms">1000</param>
                 <param name="enc_counts_per_rev">1320</param>
+                <param name="debug_comms_feedback">1</param>
                 <param name="pid_p">25</param>
                 <param name="pid_d">5</param>
                 <param name="pid_i">0</param>
