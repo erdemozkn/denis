@@ -6,7 +6,7 @@ def generate_launch_description():
         Node(
             package='camera_ros',
             executable='camera_node',
-            name='eye_camera',
+            name='front_camera',
             namespace='camera',
             parameters=[{
                 'camera': '/base/soc/i2c0mux/i2c@1/imx219@10',
@@ -16,7 +16,7 @@ def generate_launch_description():
                 'height' : 480
             }],
             remappings=[
-                ('/camera/eye_camera/image_raw', '/camera/image_raw'), # unnecessary remapping here
+                ('/camera/front_camera/image_raw', '/camera/image_raw'), # unnecessary remapping here
             ]
         )
     ])
