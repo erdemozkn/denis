@@ -1,0 +1,7 @@
+<library path="denis_bt">
+  <class name="CheckZone"
+         type="denis_bt::CheckZone"
+         base_class_type="BT::ConditionNode">
+    <description>Check area that defined zone with yaml.</description>
+  </class>
+</library>
