@@ -17,8 +17,8 @@ class FaceDetector(Node):
         )
         
         if not os.path.exists(model_path):
-            self.get_logger().error(f"Model bulunamadı! Yol: {model_path}")
-            raise FileNotFoundError(f"YuNet modeli eksik: {model_path}")
+            self.get_logger().error(f"No path model: {model_path}")
+            raise FileNotFoundError(f"Face detection model path error: {model_path}")
 
         self.bridge = CvBridge()
 
@@ -39,14 +39,12 @@ class FaceDetector(Node):
 
         self.publisher = self.create_publisher(Image, '/camera/face_detected', 10)
 
-        self.get_logger().info('YuNet Yüz tespit node başlatıldı! (Daha stabil ve hızlı)')
+        self.get_logger().info('Face detection has been started.')
 
     def image_callback(self, msg):
         try:
-            # ROS → OpenCV
             frame = self.bridge.imgmsg_to_cv2(msg, desired_encoding="bgr8")
 
-            # Performans için görüntüyü küçült (Raspberry Pi önerisi)
             h, w = frame.shape[:2]
             if w > 640:
                 scale = 640 / w
@@ -54,22 +52,17 @@ class FaceDetector(Node):
             else:
                 frame_small = frame
 
-            # YuNet beklediği boyuta ayarla
             self.face_detector.setInputSize((frame_small.shape[1], frame_small.shape[0]))
 
-            # Yüz tespiti
             faces = self.face_detector.detect(frame_small)
 
             if faces[1] is not None:
                 for face in faces[1]:
-                    # Koordinatlar
                     x, y, width, height = face[0:4].astype(int)
                     confidence = face[-1]
 
-                    # Dikdörtgen çiz
                     cv2.rectangle(frame_small, (x, y), (x + width, y + height), (0, 255, 0), 3)
 
-                    # Güven skoru yaz
                     cv2.putText(frame_small, f'{int(confidence*100)}%', 
                                 (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
 
