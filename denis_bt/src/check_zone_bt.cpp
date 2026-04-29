@@ -1,6 +1,7 @@
 #include "behaviortree_cpp/condition_node.h"
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/pose_stamped.hpp"
+#include <ament_index_cpp/get_package_share_directory.hpp>
 #include "tf2_ros/transform_listener.h"
 #include "tf2_ros/buffer.h"
 #include <yaml-cpp/yaml.h>
@@ -25,7 +26,8 @@ namespace denis_bt
             tf_buffer_ = std::make_shared<tf2_ros::Buffer>(node_->get_clock());
             tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
 
-            std::string yaml_path = "/home/erdem/ros2_ws/src/denis_bringup/rooms/ev.yaml";
+            std::string pkg_path = ament_index_cpp::get_package_share_directory("denis_bringup");
+            std::string yaml_path = pkg_path + "/rooms/ev.yaml";
             loadZonesFromYaml(yaml_path);
 
             RCLCPP_INFO(rclcpp::get_logger("CheckZoneDbg"), "[CONSTRUCTOR] CheckZone yaratıldı, zone_name bekleniyor...");
@@ -39,25 +41,15 @@ namespace denis_bt
         BT::NodeStatus tick() override
         {
             std::string zone_name;
-            if (!getInput("zone_name", zone_name))
-            {
-                return BT::NodeStatus::FAILURE;
-            }
+            if (!getInput("zone_name", zone_name)) return BT::NodeStatus::FAILURE;
 
-            if (all_zones_.find(zone_name) == all_zones_.end())
-            {
-                RCLCPP_ERROR(node_->get_logger(), "YAML'da %s bölgesi bulunamadı!", zone_name.c_str());
-                return BT::NodeStatus::FAILURE;
-            }
+            if (all_zones_.find(zone_name) == all_zones_.end()) return BT::NodeStatus::FAILURE;
 
             auto pose = getCurrentPose();
-
-            RCLCPP_INFO(node_->get_logger(), "[%s] Robot Konumu: x=%.2f, y=%.2f",
-                        zone_name.c_str(), pose.position.x, pose.position.y);
+            if (std::isnan(pose.position.x)) return BT::NodeStatus::FAILURE;
 
             if (isPointInPolygon(pose.position.x, pose.position.y, all_zones_[zone_name]))
             {
-                RCLCPP_INFO(node_->get_logger(), ">> ROBOT %s BÖLGESİNDE!", zone_name.c_str());
                 return BT::NodeStatus::SUCCESS;
             }
 
@@ -68,7 +60,6 @@ namespace denis_bt
         rclcpp::Node::SharedPtr node_;
         std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
         std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
-
         std::map<std::string, std::vector<Point>> all_zones_;
 
         void loadZonesFromYaml(const std::string &path)
@@ -115,13 +106,13 @@ namespace denis_bt
             geometry_msgs::msg::Pose p;
             try
             {
-                auto t = tf_buffer_->lookupTransform("map", "base_footprint", tf2::TimePointZero, tf2::durationFromSec(0.1));
+                auto t = tf_buffer_->lookupTransform("map", "base_link", tf2::TimePointZero);
                 p.position.x = t.transform.translation.x;
                 p.position.y = t.transform.translation.y;
             }
             catch (tf2::TransformException &ex)
             {
-                RCLCPP_WARN(node_->get_logger(), "TF Hatası: %s", ex.what());
+                p.position.x = std::numeric_limits<double>::quiet_NaN();
             }
             return p;
         }

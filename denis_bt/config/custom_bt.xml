@@ -15,10 +15,6 @@
               <CheckZone zone_name="ramp"/>
               <SetBlackboard value="RampaController" output_key="selected_controller"/>
             </Sequence>
-            <Sequence name="AntreLogic">
-              <CheckZone zone_name="antre"/>
-              <SetBlackboard value="AntreController" output_key="selected_controller"/>
-            </Sequence>
             <SetBlackboard value="FollowPath" output_key="selected_controller"/>
           </Fallback>
 
